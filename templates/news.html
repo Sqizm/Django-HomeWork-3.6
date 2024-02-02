@@ -1,0 +1,35 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load censor_filter %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+   <h1>Все новости</h1>
+    <h5>Кол-во новостей: {{news|length}}</h5>
+   <hr>
+   {% if news %}
+       <!-- Все новости выводятся списком, спец. тегом -->
+       <ul>
+           <!-- Применяем цикл for, проходимся по всем новостям и выводим. -->
+           {% for onenw in news %}
+           <li>
+               <strong>Заголовок: </strong>{{ onenw.name|censor }}<br>
+               <!-- Дата публикации в формате день.месяц.год -->
+               <strong>Дата публикации: </strong>{{ onenw.dateCreate|date:"d.m.Y" }}<br>
+               <!-- Основной текст выводит только первые 20 символов и многоточие. -->
+               <strong>Описание: </strong>{{ onenw.description|truncatechars:20|censor }}<br>
+               <strong>Категория: </strong>{{ onenw.category.name }}
+               <!-- Пустой тег для текста, своего рода отступ. -->
+               <p>
+           </li>
+           {% endfor %}
+       </ul>
+   {% else %}
+       <h2>Новостей нет!</h2>
+   {% endif %}
+    <hr>
+{% endblock content %}
